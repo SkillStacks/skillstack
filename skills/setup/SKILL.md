@@ -76,11 +76,13 @@ npm config set //skillstack-mcp.kennyliao22.workers.dev/:_authToken <token-from-
 Tell the user:
 > "License activated for **<plugin-name>**!
 >
-> Now install the plugin:
+> Now install the plugin from your marketplace. The plugin name in your marketplace may differ from the SkillStack slug — check your marketplace's plugin list:
 >
-> `/plugin install <plugin-slug>@<marketplace-name>`
+> `/plugin install <name>@<marketplace-name>`
 >
-> Want to activate another license key? Just say so, or you're all set."
+> (Restart Claude Code after installing to load the new plugin.)
+>
+> Want to activate another license key, or are you all set?"
 
 **If activation fails:**
 
