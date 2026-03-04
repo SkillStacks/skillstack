@@ -41,7 +41,7 @@ Ask the user: "Do you have a license key for a paid plugin? (If you only want to
 
 ### Step 3: Get license key
 
-Ask the user to paste their Polar.sh license key.
+Ask the user to paste their license key (from their purchase confirmation email).
 
 ### Step 4: Identify the plugin
 
@@ -87,7 +87,7 @@ Tell the user:
 **If activation fails:**
 
 Show the error message from the response. Common issues:
-- Invalid key → "Check your license key and try again. You can find it in your Polar.sh purchase confirmation."
+- Invalid key → "Check your license key and try again. You can find it in your purchase confirmation email."
 - Revoked → "Your license has been revoked. Contact the plugin creator or renew your subscription."
 - Plugin not found → "That plugin slug wasn't found. Call skillstack_list to see available plugins."
 

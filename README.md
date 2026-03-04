@@ -7,7 +7,7 @@ Set up, install, and manage paid Claude Code plugins distributed through [SkillS
 This plugin connects Claude Code to the SkillStack distribution system. It provides skills and MCP tools that handle:
 
 - **Registry configuration** — points npm to the SkillStack registry
-- **License activation** — validates your Polar.sh license key and sets up authentication
+- **License activation** — validates your license key and sets up authentication
 - **Plugin installation** — guides you through installing plugins from creator storefronts
 - **Update management** — checks for and applies plugin updates
 
@@ -53,7 +53,7 @@ These tools are available to Claude Code automatically via the included MCP conn
 
 ```
 1. /plugin marketplace add <creator-storefront-url>
-2. /setup                          ← activates your Polar.sh license key
+2. /setup                          ← activates your license key
 3. /plugin install <plugin-name>@<marketplace-name>
 ```
 

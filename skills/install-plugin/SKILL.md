@@ -18,7 +18,7 @@ Ask the user which plugin they want to install. If they don't know what's availa
 From `skillstack_list` results, check the plugin's `license_model`:
 
 - **free**: No license needed. Proceed to install.
-- **subscription** or **onetime_snapshot**: Ask the user if they have a license key.
+- **subscription**, **onetime**, or **lifetime**: Ask the user if they have a license key.
   - If yes: call `skillstack_activate` with the plugin slug and key to register access
   - If no: direct them to the creator's purchase page
 
