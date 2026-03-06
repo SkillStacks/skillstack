@@ -20,6 +20,26 @@ If updates are available, list them:
 
 Ask the user which plugins they want to update (all, specific ones, or none).
 
+### Detecting variant upgrades
+
+After checking for version updates, also check if the user has activated a license for any plugin they previously installed as the free variant.
+
+To detect this: call `skillstack_list` and cross-reference with installed plugins. If a plugin is freemium (`is_freemium` is true) and the user now has a valid license key (check ~/.npmrc for sst_* token, then check if the plugin slug is activated), but they currently have the free variant installed (fewer skills than the total):
+
+Tell the user:
+> "**[plugin-name]** can be upgraded to premium! You have a valid license.
+>
+> This will unlock [total - free_skill_count] additional skills:
+>   [list of premium skill names if available, or just the count]
+>
+> To upgrade, reinstall the plugin:
+>   /plugin uninstall [plugin-name]@[marketplace]
+>   /plugin install [plugin-name]@[marketplace]
+>   /reload-plugins"
+
+After the user reinstalls, confirm the upgrade:
+> "**[plugin-name]** upgraded to premium — all [total] skills unlocked!"
+
 ### Step 3: Apply updates
 
 For each plugin the user wants to update, instruct them to run:
