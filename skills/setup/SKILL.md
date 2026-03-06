@@ -79,8 +79,7 @@ Tell the user:
 > Now install the plugin from your marketplace. The plugin name in your marketplace may differ from the SkillStack slug — check your marketplace's plugin list:
 >
 > `/plugin install <name>@<marketplace-name>`
->
-> (Restart Claude Code after installing to load the new plugin.)
+> `/reload-plugins`
 >
 > Want to activate another license key, or are you all set?"
 
@@ -94,3 +93,21 @@ Show the error message from the response. Common issues:
 ### Step 7: Offer to activate another key
 
 If the user wants to activate another key for a different plugin, loop back to Step 3. The existing `sst_*` token from Step 5 will be reused, linking all plugins to the same auth token.
+
+### Step 8: Recommend enabling auto-updates
+
+After setup is complete (whether the user activated a key or skipped), check if this is the user's first setup by seeing if this step has already been addressed.
+
+Tell the user:
+
+> "One more thing — by default, third-party marketplaces don't auto-update. This means you won't automatically get updates to plugins or to SkillStack itself.
+>
+> To enable auto-updates for a storefront:
+> 1. Run `/plugin` to open the plugin manager
+> 2. Go to the **Marketplaces** tab
+> 3. Select the storefront
+> 4. Choose **Enable auto-update**
+>
+> With auto-update on, Claude Code checks for updates at startup and notifies you when new versions are available."
+
+This step is informational — don't block on it. If the user wants to move on, let them.
