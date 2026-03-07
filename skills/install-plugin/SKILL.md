@@ -49,6 +49,11 @@ From `skillstack_list` results, check the plugin's `license_model`, `is_freemium
   - If yes: Run activation via `/setup`, then install.
   - If no: Direct them to the creator's purchase page.
 
+**Creator contact:** If `creator_contact` is available from the `skillstack_list` response, show it after license info:
+> "Questions about this plugin? Contact the creator: **<creator_contact>**"
+
+This is especially useful for paid plugins where buyers may need help with purchases or license issues.
+
 **Handling 403 errors:** If the user already has an `sst_*` token in `~/.npmrc` (from a previous purchase) but hasn't activated a license for THIS plugin, the install will fail with 403 ("no access to this plugin"). If this happens:
 > "It looks like you have a SkillStack account but haven't activated a license for this plugin yet. Run `/setup` to activate your license key for **<plugin-name>**, then try installing again."
 
