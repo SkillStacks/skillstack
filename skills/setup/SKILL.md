@@ -96,10 +96,20 @@ Then:
 
 **If activation fails:**
 
-Show the error message from the response. Common issues:
-- Invalid key → "Check your license key and try again. You can find it in your purchase confirmation email."
-- Revoked → "Your license has been revoked. Contact the plugin creator or renew your subscription."
-- Plugin not found → "That plugin slug wasn't found. Call skillstack_list to see available plugins."
+Check the `status` field in the error response and show the appropriate message:
+
+- **`misconfigured`**: This means the plugin's license configuration is broken — NOT a problem with the buyer's key. Show:
+  > "This plugin's license configuration is incomplete — **this is NOT a problem with your license key.**
+  >
+  > [If `creator_contact` is in the response]: Contact the creator at: **<creator_contact>**
+  > [If no `creator_contact`]: Report this on the plugin's GitHub repo: **<github_repo>**"
+
+  Do NOT suggest the buyer re-enter their key or troubleshoot on their end.
+
+- **`not_found`**: "Invalid license key. Check your key and try again. You can find it in your purchase confirmation email."
+- **`revoked`**: "Your license has been revoked. Renew your subscription to regain access."
+- **`expired`**: "Your license has expired. Renew to regain access."
+- **Plugin not found** (plugin_slug doesn't exist): "That plugin slug wasn't found. Call `skillstack_list` to see available plugins."
 
 ### Step 7: Offer to activate another key
 
