@@ -4,6 +4,14 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.2.0] - 2026-03-07
+
+### Added
+
+- **Misconfigured plugin handling** in `/setup` — when a plugin's license config is broken (e.g., missing store_id), buyers now see a clear message that it's NOT their license key, with creator contact info or GitHub repo link
+- **`creator_contact` display** in `/install-plugin` — shows creator's support email/URL for paid plugins so buyers can reach them with purchase or license questions
+- **`expired` status handling** in `/setup` — distinct message for expired licenses (previously lumped with generic errors)
+
 ## [1.1.0] - 2026-03-07
 
 ### Added

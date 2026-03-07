@@ -25,9 +25,9 @@ Once installed, run `/setup` to configure your system and activate any license k
 
 | Skill | Description |
 |-------|-------------|
-| `/setup` | Configure the SkillStack registry and activate license keys. Run this first. |
-| `/install-plugin` | Guided plugin installation from a creator's marketplace. |
-| `/update-plugins` | Check for and apply updates to your installed plugins. |
+| `/setup` | Configure the SkillStack registry and activate license keys. Handles misconfigured plugin errors with creator contact info. Run this first. |
+| `/install-plugin` | Guided plugin installation from a creator's marketplace. Shows creator contact for paid plugins. |
+| `/update-plugins` | Check for and apply updates to your installed plugins. License-type-aware messaging. |
 
 ## MCP Tools
 
