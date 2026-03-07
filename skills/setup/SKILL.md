@@ -41,7 +41,13 @@ Ask the user: "Do you have a license key for a paid plugin? (If you only want to
 
 ### Step 3: Get license key
 
-Ask the user to paste their license key (from their purchase confirmation email).
+Ask the user to paste their license key.
+
+> "Paste your license key. You can usually find it in:
+> - Your **purchase confirmation email** from the creator's payment provider
+> - Your account dashboard on **Polar.sh** (Orders → License Keys) or **Lemon Squeezy** (My Orders)
+>
+> The key format varies by provider (UUID for Polar, alphanumeric with dashes for Lemon Squeezy)."
 
 ### Step 4: Identify the plugin
 
@@ -60,12 +66,12 @@ If found, extract the `sst_*` token value. This will be passed to `skillstack_ac
 
 Call `skillstack_activate` with:
 - `plugin_slug`: the plugin slug from Step 4
-- `license_key`: the Polar key from Step 3
+- `license_key`: the license key from Step 3
 - `existing_token`: the `sst_*` token from Step 5 (if one exists)
 
 **If activation succeeds:**
 
-The response includes a `token` field (the SkillStack token) and `npmrc_instructions`.
+The response includes a `token` field (the SkillStack token), `npmrc_instructions`, and `license_type` (the detected license type — `subscription`, `onetime`, or `lifetime`).
 
 Set the auth token in npm:
 
@@ -73,10 +79,15 @@ Set the auth token in npm:
 npm config set //skillstack-mcp.kennyliao22.workers.dev/:_authToken <token-from-response>
 ```
 
-Tell the user:
-> "License activated for **<plugin-name>**!
->
-> Now install the plugin from your marketplace. The plugin name in your marketplace may differ from the SkillStack slug — check your marketplace's plugin list:
+Tell the user, including the detected license type:
+
+- **subscription**: "License activated for **<plugin-name>** (subscription — updates included while active)."
+- **lifetime**: "License activated for **<plugin-name>** (lifetime — all future updates included)."
+- **onetime**: "License activated for **<plugin-name>** (one-time purchase — locked to v<version>)."
+- **unknown/null**: "License activated for **<plugin-name>**!"
+
+Then:
+> "Now install the plugin from your marketplace. The plugin name in your marketplace may differ from the SkillStack slug — check your marketplace's plugin list:
 >
 > `/plugin install <name>@<marketplace-name>`
 > `/reload-plugins`
