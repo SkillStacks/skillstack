@@ -4,6 +4,12 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.4.1] - 2026-03-10
+
+### Changed
+
+- **Custom domain**: All registry and MCP URLs updated from `skillstack-mcp.kennyliao22.workers.dev` to `mcp.skillstack.sh`
+
 ## [1.4.0] - 2026-03-10
 
 ### Changed

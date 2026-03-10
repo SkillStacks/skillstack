@@ -15,7 +15,7 @@ Read `~/.npmrc` and check if it contains `@skillstack:registry`.
 - If **not configured** → run:
 
 ```bash
-npm config set @skillstack:registry https://skillstack-mcp.kennyliao22.workers.dev
+npm config set @skillstack:registry https://mcp.skillstack.sh
 ```
 
 Tell the user: "SkillStack registry configured."
@@ -80,7 +80,7 @@ Loop back to Step 3 to let the user re-enter the key.
 
 Read `~/.npmrc` and look for an existing auth token line:
 ```
-//skillstack-mcp.kennyliao22.workers.dev/:_authToken=sst_...
+//mcp.skillstack.sh/:_authToken=sst_...
 ```
 
 If found, extract the `sst_*` token value. This will be passed to `skillstack_activate` as `existing_token` so the new plugin is linked to the same token.
@@ -99,7 +99,7 @@ The response includes a `token` field (the SkillStack token), `npmrc_instruction
 Set the auth token in npm:
 
 ```bash
-npm config set //skillstack-mcp.kennyliao22.workers.dev/:_authToken <token-from-response>
+npm config set //mcp.skillstack.sh/:_authToken <token-from-response>
 ```
 
 Tell the user, including the detected license type:
