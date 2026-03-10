@@ -1,0 +1,14 @@
+{
+  "name": "skillstack",
+  "description": "SkillStack — install, update, and manage paid Claude Code plugins.",
+  "owner": {
+    "name": "SkillStack"
+  },
+  "plugins": [
+    {
+      "name": "skillstack",
+      "description": "Install, update, and manage paid Claude Code plugins via SkillStack.",
+      "source": "./"
+    }
+  ]
+}
