@@ -21,13 +21,13 @@ Install SkillStack once as a standalone marketplace, then add creator storefront
 /reload-plugins
 ```
 
-Then add creator storefronts and run `/setup` to configure your system and activate license keys. SkillStack auto-detects which plugin your key belongs to.
+Then add creator storefronts and run `/activate-license` to configure your system and activate license keys. SkillStack auto-detects which plugin your key belongs to.
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
-| `/setup` | Configure the SkillStack registry and activate license keys. Handles misconfigured plugin errors with creator contact info. Run this first. |
+| `/activate-license` | Configure the SkillStack registry and activate license keys. Handles misconfigured plugin errors with creator contact info. Run this first. |
 | `/install-plugin` | Guided plugin installation from a creator's marketplace. Shows creator contact for paid plugins. |
 | `/update-plugins` | Check for and apply updates to your installed plugins. License-type-aware messaging. |
 
@@ -49,16 +49,16 @@ These tools are available to Claude Code automatically via the included MCP conn
 2. /plugin install skillstack@skillstack-marketplace
 3. /reload-plugins
 4. /plugin marketplace add <creator-storefront-url>     ← per creator
-5. /setup                                               ← activates license keys
+5. /activate-license                                     ← activates license keys
 6. /plugin install <plugin-name>@<storefront-name>
 7. /reload-plugins
 ```
 
-The `/setup` skill handles all npm configuration and license activation. Paste your license key and SkillStack auto-detects which plugin it's for.
+The `/activate-license` skill handles all npm configuration and license activation. Paste your license key and SkillStack auto-detects which plugin it's for.
 
 ## Multi-Plugin Support
 
-One SkillStack token works for all your purchased plugins. When you activate a second license key, `/setup` automatically links it to your existing token. No need to reconfigure `~/.npmrc`.
+One SkillStack token works for all your purchased plugins. When you activate a second license key, `/activate-license` automatically links it to your existing token. No need to reconfigure `~/.npmrc`.
 
 ## License
 

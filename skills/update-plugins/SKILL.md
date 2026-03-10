@@ -68,7 +68,7 @@ To detect this: call `skillstack_list` and check each plugin's `license_options`
 
 > "**<plugin-name>** offers a lifetime license upgrade. Your current one-time license covers v<purchased_version>. A lifetime license would include all future updates.
 >
-> Contact the creator to upgrade, then run `/setup` to activate your new key."
+> Contact the creator to upgrade, then run `/activate-license` to activate your new key."
 
 This is informational — don't block on it. Show it alongside other update info.
 

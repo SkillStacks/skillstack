@@ -7,7 +7,7 @@ description: Install a plugin from SkillStack via the native Claude Code plugin 
 
 ### Step 1: Check SkillStack is configured
 
-Verify `~/.npmrc` contains `@skillstack:registry`. If not, run the setup skill first.
+Verify `~/.npmrc` contains `@skillstack:registry`. If not, run the activate-license skill first.
 
 ### Step 2: Identify the plugin
 
@@ -27,7 +27,7 @@ From `skillstack_list` results, check the plugin's `license_model`, `is_freemium
   > Would you like to install the free version, or do you have a license key?"
 
   - If they choose free: Proceed to install (no auth needed).
-  - If they have a key: Run activation via `/setup`, then install.
+  - If they have a key: Run activation via `/activate-license`, then install.
 
 - **Multi-license** (`license_options` has multiple keys, e.g., `{ "onetime": {...}, "lifetime": {...} }`): Tell the user what purchase options the creator offers:
   > "This plugin offers multiple purchase options:
@@ -42,11 +42,11 @@ From `skillstack_list` results, check the plugin's `license_model`, `is_freemium
   >
   > If you already purchased, provide your license key and SkillStack will auto-detect which option you bought."
 
-  - If they have a key: Run activation via `/setup`, then install.
+  - If they have a key: Run activation via `/activate-license`, then install.
   - If they don't have a key: Direct them to the creator's purchase page.
 
 - **Single paid** (`subscription`, `onetime`, or `lifetime`, not freemium): Ask for license key.
-  - If yes: Run activation via `/setup`, then install.
+  - If yes: Run activation via `/activate-license`, then install.
   - If no: Direct them to the creator's purchase page.
 
 **Creator contact:** If `creator_contact` is available from the `skillstack_list` response, show it after license info:
@@ -55,7 +55,7 @@ From `skillstack_list` results, check the plugin's `license_model`, `is_freemium
 This is especially useful for paid plugins where buyers may need help with purchases or license issues.
 
 **Handling 403 errors:** If the user already has an `sst_*` token in `~/.npmrc` (from a previous purchase) but hasn't activated a license for THIS plugin, the install will fail with 403 ("no access to this plugin"). If this happens:
-> "It looks like you have a SkillStack account but haven't activated a license for this plugin yet. Run `/setup` to activate your license key for **<plugin-name>**, then try installing again."
+> "It looks like you have a SkillStack account but haven't activated a license for this plugin yet. Run `/activate-license` to activate your license key for **<plugin-name>**, then try installing again."
 
 ### Step 4: Install via Claude Code
 
@@ -92,7 +92,7 @@ If the plugin is freemium and was installed without a license (free variant):
 >   Included: [list free skill names]
 >
 >   [remaining count] premium skills available with a [license_model].
->   Run /setup to activate your license key when you're ready to upgrade."
+>   Run /activate-license to activate your license key when you're ready to upgrade."
 
 If the plugin was installed with a valid license (full variant):
 > "Installed **[plugin-name]** — all [total] skills unlocked!"

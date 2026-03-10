@@ -1,9 +1,9 @@
 ---
-name: setup
-description: Set up SkillStack for first-time use or activate a new license key. Configures npm registry access and handles license activation.
+name: activate-license
+description: Activate a SkillStack license key. Configures npm registry access and handles license activation.
 ---
 
-## SkillStack Setup
+## SkillStack License Activation
 
 This skill configures your system to install paid Claude Code plugins via SkillStack. It handles npm registry configuration and license key activation.
 
@@ -33,7 +33,7 @@ Ask the user: "Do you have a license key for a paid plugin you'd like to activat
   >
   > `/plugin install <plugin-name>@<storefront-name>`
   >
-  > When you purchase a paid plugin later, run `/setup` again to activate your license key."
+  > When you purchase a paid plugin later, run `/activate-license` again to activate your license key."
 
   → Done.
 
