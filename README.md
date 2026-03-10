@@ -20,6 +20,8 @@ Install SkillStack once as a standalone marketplace, then add creator storefront
 /plugin install skillstack@skillstack-marketplace
 ```
 
+When prompted, select **"Install for you (user scope)"** — the first and recommended option.
+
 Restart Claude Code, then add creator storefronts and run `/activate-license` to configure your system and activate license keys. SkillStack auto-detects which plugin your key belongs to.
 
 ## Skills
@@ -45,11 +47,11 @@ These tools are available to Claude Code automatically via the included MCP conn
 
 ```
 1. /plugin marketplace add https://github.com/SkillStacks/skillstack.git      ← one-time
-2. /plugin install skillstack@skillstack-marketplace
+2. /plugin install skillstack@skillstack-marketplace  ← select "Install for you (user scope)"
 3. Restart Claude Code
 4. /plugin marketplace add <creator-storefront-url>     ← per creator
 5. /activate-license                                     ← activates license keys
-6. /plugin install <plugin-name>@<storefront-name>
+6. /plugin install <plugin-name>@<storefront-name>    ← select "Install for you (user scope)"
 7. Restart Claude Code
 ```
 

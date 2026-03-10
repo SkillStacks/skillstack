@@ -72,6 +72,8 @@ For example:
 
 **Note:** The `<marketplace-name>` is the name of the creator's storefront, not "skillstack". Check which marketplaces the user has added with `/plugin` if they're unsure.
 
+**Important:** Tell the user that when Claude Code prompts them to choose an installation scope, they should select **"Install for you (user scope)"** — the first option. This is the recommended default.
+
 This uses Claude Code's native plugin installer, which:
 1. Reads the creator's storefront marketplace
 2. Downloads the plugin via npm from the SkillStack registry
