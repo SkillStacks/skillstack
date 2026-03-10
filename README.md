@@ -16,7 +16,7 @@ This plugin connects Claude Code to the SkillStack distribution system. It provi
 Install SkillStack once as a standalone marketplace, then add creator storefronts separately:
 
 ```
-/plugin marketplace add SkillStacks/skillstack
+/plugin marketplace add https://github.com/SkillStacks/skillstack.git
 /plugin install skillstack@skillstack-marketplace
 /reload-plugins
 ```
@@ -45,7 +45,7 @@ These tools are available to Claude Code automatically via the included MCP conn
 ## Quick Start
 
 ```
-1. /plugin marketplace add SkillStacks/skillstack      ← one-time
+1. /plugin marketplace add https://github.com/SkillStacks/skillstack.git      ← one-time
 2. /plugin install skillstack@skillstack-marketplace
 3. /reload-plugins
 4. /plugin marketplace add <creator-storefront-url>     ← per creator
