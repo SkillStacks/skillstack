@@ -110,7 +110,7 @@ Tell the user, including the detected license type:
 - **onetime**: "License activated for **<plugin-name>** (one-time purchase — locked to v<version>)."
 - **unknown/null**: "License activated for **<plugin-name>**!"
 
-Then show the install command. The `skillstack_activate` response includes an `install_command` field (e.g., `claude plugin add https://github.com/org/storefront`) when the storefront is known. The `skillstack_resolve_key` response from Step 4 may also have it.
+Then show the install command. The `skillstack_activate` response includes an `install_command` field (e.g., `/plugin install https://github.com/org/storefront`) when the storefront is known. The `skillstack_resolve_key` response from Step 4 may also have it.
 
 **If `install_command` is available** (from either response):
 > "Now install the plugin from the creator's storefront:"
