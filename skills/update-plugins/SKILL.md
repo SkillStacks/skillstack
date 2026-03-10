@@ -55,7 +55,8 @@ Tell the user:
 > To upgrade, reinstall the plugin:
 >   /plugin uninstall [plugin-name]@[marketplace]
 >   /plugin install [plugin-name]@[marketplace]
->   /reload-plugins"
+>
+> Then restart Claude Code for the changes to take effect."
 
 After the user reinstalls, confirm the upgrade:
 > "**[plugin-name]** upgraded to premium — all [total] skills unlocked!"

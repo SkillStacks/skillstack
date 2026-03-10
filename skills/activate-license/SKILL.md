@@ -113,7 +113,8 @@ Then:
 > "Now install the plugin from your creator's storefront:
 >
 > `/plugin install <name>@<storefront-name>`
-> `/reload-plugins`
+>
+> Then restart Claude Code for the skills to take effect.
 >
 > Want to activate another license key, or are you all set?"
 
