@@ -4,6 +4,12 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.5.0] - 2026-03-10
+
+### Changed
+
+- **`/activate-license`**: Now shows the exact `claude plugin add` install command after activation when the storefront is known (from `install_command` field in worker response), instead of generic placeholder instructions
+
 ## [1.4.1] - 2026-03-10
 
 ### Changed

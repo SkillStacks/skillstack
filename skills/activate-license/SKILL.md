@@ -57,6 +57,7 @@ Call `skillstack_resolve_key` with the license key from Step 3.
 
 **If `status: "resolved"`:**
 Tell the user: "Found it — this key is for **<plugin_name>**."
+Save the `install_command` from the response (if present) — you'll use it in Step 6.
 Continue to Step 5 with the `plugin_slug` from the response.
 
 **If `status: "multiple_matches"`:**
@@ -109,9 +110,21 @@ Tell the user, including the detected license type:
 - **onetime**: "License activated for **<plugin-name>** (one-time purchase — locked to v<version>)."
 - **unknown/null**: "License activated for **<plugin-name>**!"
 
-Then:
+Then show the install command. The `skillstack_activate` response includes an `install_command` field (e.g., `claude plugin add https://github.com/org/storefront`) when the storefront is known. The `skillstack_resolve_key` response from Step 4 may also have it.
+
+**If `install_command` is available** (from either response):
+> "Now install the plugin from the creator's storefront:"
+>
+> `<install_command>`
+>
+> "Then restart Claude Code for the skills to take effect.
+>
+> Want to activate another license key, or are you all set?"
+
+**If `install_command` is NOT available:**
 > "Now install the plugin from your creator's storefront:
 >
+> `/plugin marketplace add <creator-storefront-url>`
 > `/plugin install <name>@<storefront-name>`
 >
 > Then restart Claude Code for the skills to take effect.
