@@ -57,7 +57,7 @@ Call `skillstack_resolve_key` with the license key from Step 3.
 
 **If `status: "resolved"`:**
 Tell the user: "Found it — this key is for **<plugin_name>**."
-Save the `install_command` from the response (if present) — you'll use it in Step 6.
+Save the `marketplace_command` and `install_command` from the response (if present) — you'll use them in Step 6.
 Continue to Step 5 with the `plugin_slug` from the response.
 
 **If `status: "multiple_matches"`:**
@@ -110,23 +110,25 @@ Tell the user, including the detected license type:
 - **onetime**: "License activated for **<plugin-name>** (one-time purchase — locked to v<version>)."
 - **unknown/null**: "License activated for **<plugin-name>**!"
 
-Then show the install command. The `skillstack_activate` response includes an `install_command` field (e.g., `/plugin install https://github.com/org/storefront`) when the storefront is known. The `skillstack_resolve_key` response from Step 4 may also have it.
+Then show the install commands. The `skillstack_activate` response includes `marketplace_command` and `install_command` fields when the storefront is known. The `skillstack_resolve_key` response from Step 4 may also have them.
 
-**If `install_command` is available** (from either response):
-> "Now install the plugin from the creator's storefront:"
+**If `marketplace_command` and `install_command` are available** (from either response):
+> "Now add the creator's storefront and install the plugin:"
 >
+> `<marketplace_command>`
 > `<install_command>`
 >
-> "Then restart Claude Code for the skills to take effect.
+> Select **"Install for you (user scope)"** when prompted. Then restart Claude Code for the skills to take effect.
 >
 > Want to activate another license key, or are you all set?"
 
-**If `install_command` is NOT available:**
-> "Now install the plugin from your creator's storefront. Get the storefront URL from the creator, then run:
+**If install commands are NOT available:**
+> "Now add the creator's storefront and install the plugin. Get the storefront URL from the creator, then run:
 >
-> `/plugin install <creator-storefront-url>`
+> `/plugin marketplace add <creator-storefront-url>`
+> `/plugin install <plugin-name>@<storefront-name>`
 >
-> Then restart Claude Code for the skills to take effect.
+> Select **"Install for you (user scope)"** when prompted. Then restart Claude Code for the skills to take effect.
 >
 > Want to activate another license key, or are you all set?"
 
