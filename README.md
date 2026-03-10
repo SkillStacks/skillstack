@@ -17,7 +17,7 @@ Install SkillStack once as a standalone marketplace, then add creator storefront
 
 ```
 /plugin marketplace add SkillStacks/skillstack
-/plugin install skillstack@skillstack
+/plugin install skillstack@skillstack-marketplace
 /reload-plugins
 ```
 
@@ -46,7 +46,7 @@ These tools are available to Claude Code automatically via the included MCP conn
 
 ```
 1. /plugin marketplace add SkillStacks/skillstack      ← one-time
-2. /plugin install skillstack@skillstack
+2. /plugin install skillstack@skillstack-marketplace
 3. /reload-plugins
 4. /plugin marketplace add <creator-storefront-url>     ← per creator
 5. /setup                                               ← activates license keys
