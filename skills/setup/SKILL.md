@@ -22,16 +22,16 @@ Tell the user: "SkillStack registry configured."
 
 ### Step 2: Ask about license key
 
-Ask the user: "Do you have a license key for a paid plugin? (If you only want to install free plugins, you can skip this.)"
+Ask the user: "Do you have a license key for a paid plugin you'd like to activate? If you only need free plugins, you're already good to go."
 
 - If **no** → tell them:
-  > "You're all set for free plugins! To install a plugin, first add a creator's marketplace:"
+  > "You're all set for free plugins! To install a plugin, first add a creator's storefront marketplace:"
   >
-  > `/plugin marketplace add <creator-marketplace-url>`
+  > `/plugin marketplace add <creator-storefront-url>`
   >
   > Then install the plugin:
   >
-  > `/plugin install <plugin-name>@<marketplace-name>`
+  > `/plugin install <plugin-name>@<storefront-name>`
   >
   > When you purchase a paid plugin later, run `/setup` again to activate your license key."
 
@@ -43,15 +43,38 @@ Ask the user: "Do you have a license key for a paid plugin? (If you only want to
 
 Ask the user to paste their license key.
 
-> "Paste your license key. You can usually find it in:
+> "Great! Paste your license key here.
+>
+> You can usually find it in:
 > - Your **purchase confirmation email** from the creator's payment provider
 > - Your account dashboard on **Polar.sh** (Orders → License Keys) or **Lemon Squeezy** (My Orders)
 >
 > The key format varies by provider (UUID for Polar, alphanumeric with dashes for Lemon Squeezy)."
 
-### Step 4: Identify the plugin
+### Step 4: Auto-resolve the plugin
 
-Ask the user which plugin the key is for. If they're unsure, call `skillstack_list` to show available plugins and help them identify the right one.
+Call `skillstack_resolve_key` with the license key from Step 3.
+
+**If `status: "resolved"`:**
+Tell the user: "Found it — this key is for **<plugin_name>**."
+Continue to Step 5 with the `plugin_slug` from the response.
+
+**If `status: "multiple_matches"`:**
+Show the matches and ask the user to pick:
+> "This key matched multiple plugins:
+> - **<plugin_name_1>** (`<plugin_slug_1>`)
+> - **<plugin_name_2>** (`<plugin_slug_2>`)
+>
+> Which one would you like to activate?"
+
+Continue to Step 5 with the chosen slug.
+
+**If `status: "not_found"`:**
+> "That key didn't match any registered plugin. Double-check your key and try again.
+>
+> You can find it in your purchase confirmation email or your account dashboard on **Polar.sh** (Orders → License Keys) or **Lemon Squeezy** (My Orders)."
+
+Loop back to Step 3 to let the user re-enter the key.
 
 ### Step 5: Check for existing SkillStack token
 
@@ -87,9 +110,9 @@ Tell the user, including the detected license type:
 - **unknown/null**: "License activated for **<plugin-name>**!"
 
 Then:
-> "Now install the plugin from your marketplace. The plugin name in your marketplace may differ from the SkillStack slug — check your marketplace's plugin list:
+> "Now install the plugin from your creator's storefront:
 >
-> `/plugin install <name>@<marketplace-name>`
+> `/plugin install <name>@<storefront-name>`
 > `/reload-plugins`
 >
 > Want to activate another license key, or are you all set?"
@@ -121,9 +144,7 @@ After setup is complete (whether the user activated a key or skipped), check if 
 
 Tell the user:
 
-> "One more thing — by default, third-party marketplaces don't auto-update. This means you won't automatically get updates to plugins or to SkillStack itself.
->
-> To enable auto-updates for a storefront:
+> "One thing to note — by default, third-party marketplaces don't auto-update. To enable auto-updates:
 > 1. Run `/plugin` to open the plugin manager
 > 2. Go to the **Marketplaces** tab
 > 3. Select the storefront
