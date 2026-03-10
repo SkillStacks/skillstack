@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 
-- **`/activate-license`**: Now shows the exact `claude plugin add` install command after activation when the storefront is known (from `install_command` field in worker response), instead of generic placeholder instructions
+- **`/activate-license`**: Now shows the exact `/plugin install` command after activation when the storefront is known (from `install_command` field in worker response), instead of generic placeholder instructions
 
 ## [1.4.1] - 2026-03-10
 

@@ -122,10 +122,9 @@ Then show the install command. The `skillstack_activate` response includes an `i
 > Want to activate another license key, or are you all set?"
 
 **If `install_command` is NOT available:**
-> "Now install the plugin from your creator's storefront:
+> "Now install the plugin from your creator's storefront. Get the storefront URL from the creator, then run:
 >
-> `/plugin marketplace add <creator-storefront-url>`
-> `/plugin install <name>@<storefront-name>`
+> `/plugin install <creator-storefront-url>`
 >
 > Then restart Claude Code for the skills to take effect.
 >
