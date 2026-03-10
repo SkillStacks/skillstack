@@ -13,13 +13,15 @@ This plugin connects Claude Code to the SkillStack distribution system. It provi
 
 ## How It Works
 
-Creator storefronts automatically include this plugin, so you get it when you add any SkillStack-powered marketplace. No manual installation needed.
+Install SkillStack once as a standalone marketplace, then add creator storefronts separately:
 
 ```
-/plugin marketplace add https://github.com/<creator>/storefront
+/plugin marketplace add SkillStacks/skillstack
+/plugin install skillstack@skillstack
+/reload-plugins
 ```
 
-Once installed, run `/setup` to configure your system and activate any license keys you have.
+Then add creator storefronts and run `/setup` to configure your system and activate license keys. SkillStack auto-detects which plugin your key belongs to.
 
 ## Skills
 
@@ -37,27 +39,22 @@ These tools are available to Claude Code automatically via the included MCP conn
 |------|-------------|
 | `skillstack_list` | Browse all available plugins with metadata and pricing info |
 | `skillstack_activate` | Validate a license key and get an auth token for paid plugins |
+| `skillstack_resolve_key` | Auto-detect which plugin a license key belongs to |
 | `skillstack_check_updates` | Compare installed versions against latest available |
 
 ## Quick Start
 
-**Free plugins:**
-
 ```
-1. /plugin marketplace add <creator-storefront-url>
-2. /setup
-3. /plugin install <plugin-name>@<marketplace-name>
-```
-
-**Paid plugins:**
-
-```
-1. /plugin marketplace add <creator-storefront-url>
-2. /setup                          ← activates your license key
-3. /plugin install <plugin-name>@<marketplace-name>
+1. /plugin marketplace add SkillStacks/skillstack      ← one-time
+2. /plugin install skillstack@skillstack
+3. /reload-plugins
+4. /plugin marketplace add <creator-storefront-url>     ← per creator
+5. /setup                                               ← activates license keys
+6. /plugin install <plugin-name>@<storefront-name>
+7. /reload-plugins
 ```
 
-The `/setup` skill handles all the npm configuration and license activation — you just provide your license key when prompted.
+The `/setup` skill handles all npm configuration and license activation. Paste your license key and SkillStack auto-detects which plugin it's for.
 
 ## Multi-Plugin Support
 

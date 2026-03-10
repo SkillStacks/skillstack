@@ -4,6 +4,19 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.3.0] - 2026-03-10
+
+### Added
+
+- **Standalone marketplace** — SkillStack is now its own marketplace (`/plugin marketplace add SkillStacks/skillstack`), no longer bundled in every creator's storefront
+- **Auto-resolve license keys** in `/setup` — Step 4 now calls `skillstack_resolve_key` to automatically detect which plugin a key belongs to, eliminating the "which plugin is this key for?" question
+- **`skillstack_resolve_key` MCP tool** — three-phase resolution: DB lookup, Lemon Squeezy product_id match, Polar org enumeration
+
+### Changed
+
+- `/setup` Step 2 updated wording to "storefront marketplace" language
+- `/setup` Step 4 no longer calls `skillstack_list` for plugin identification
+
 ## [1.2.0] - 2026-03-07
 
 ### Added
