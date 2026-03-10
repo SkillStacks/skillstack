@@ -25,15 +25,14 @@ Tell the user: "SkillStack registry configured."
 Ask the user: "Do you have a license key for a paid plugin you'd like to activate? If you only need free plugins, you're already good to go."
 
 - If **no** → tell them:
-  > "You're all set for free plugins! To install a plugin, first add a creator's storefront marketplace:"
+  > "You're all set for free plugins! To install a plugin, add a creator's storefront and install from it:
   >
-  > `/plugin marketplace add <creator-storefront-url>`
-  >
-  > Then install the plugin:
-  >
+  > `/plugin marketplace add <creator-storefront-url>.git`
   > `/plugin install <plugin-name>@<storefront-name>`
   >
-  > When you purchase a paid plugin later, run `/activate-license` again to activate your license key."
+  > Select **"Install for you (user scope)"** when prompted. Restart Claude Code when done.
+  >
+  > When you purchase a paid plugin later, run `/activate-license` again — it'll activate your key and give you the exact install commands."
 
   → Done.
 

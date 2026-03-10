@@ -13,16 +13,16 @@ This plugin connects Claude Code to the SkillStack distribution system. It provi
 
 ## How It Works
 
-Install SkillStack once as a standalone marketplace, then add creator storefronts separately:
+Install SkillStack once as a standalone marketplace:
 
 ```
 /plugin marketplace add https://github.com/SkillStacks/skillstack.git
 /plugin install skillstack@skillstack-marketplace
 ```
 
-When prompted, select **"Install for you (user scope)"** — the first and recommended option.
+Select **"Install for you (user scope)"** when prompted. Restart Claude Code.
 
-Restart Claude Code, then run `/activate-license` to configure your system and activate license keys. After that, add creator storefronts and install plugins. SkillStack auto-detects which plugin your key belongs to.
+Then run `/activate-license` — it configures your system, activates license keys, and gives you the exact commands to install the plugin. Follow Claude's instructions and restart when done.
 
 ## Skills
 
@@ -46,16 +46,14 @@ These tools are available to Claude Code automatically via the included MCP conn
 ## Quick Start
 
 ```
-1. /plugin marketplace add https://github.com/SkillStacks/skillstack.git      ← one-time
+1. /plugin marketplace add https://github.com/SkillStacks/skillstack.git
 2. /plugin install skillstack@skillstack-marketplace  ← select "Install for you (user scope)"
 3. Restart Claude Code
-4. /activate-license                                     ← activates license keys
-5. /plugin marketplace add <creator-storefront-url>     ← per creator
-6. /plugin install <plugin-name>@<storefront-name>    ← select "Install for you (user scope)"
-7. Restart Claude Code
+4. /activate-license                                  ← follow Claude's instructions to install
+5. Restart Claude Code
 ```
 
-The `/activate-license` skill handles all npm configuration and license activation. Paste your license key and SkillStack auto-detects which plugin it's for.
+The `/activate-license` skill handles registry config, license activation, and gives you the exact storefront + install commands.
 
 ## Multi-Plugin Support
 
