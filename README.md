@@ -30,7 +30,7 @@ Then run `/activate-license` — it configures your system, activates license ke
 |-------|-------------|
 | `/activate-license` | Configure the SkillStack registry and activate license keys. Handles misconfigured plugin errors with creator contact info. Run this first. |
 | `/install-plugin` | Guided plugin installation from a creator's marketplace. Shows creator contact for paid plugins. |
-| `/update-plugins` | Check for and apply updates to your installed plugins. License-type-aware messaging. |
+| `/update-plugins` | Check for and apply updates to your installed plugins. License-type-aware messaging. Handles npm cache cleanup automatically. |
 
 ## MCP Tools
 

@@ -75,19 +75,44 @@ This is informational — don't block on it. Show it alongside other update info
 
 ### Step 3: Apply updates
 
-For each plugin the user wants to update, instruct them to run:
+SkillStack plugins are npm-sourced. Claude Code's native `/plugin update` has a known issue where
+npm's lockfile prevents version resolution even when a newer version is available. To work around
+this, the skill must clean the npm cache before reinstalling.
+
+For each plugin the user wants to update:
+
+#### 3a. Clean stale npm cache
+
+The npm cache lives at `~/.claude/plugins/npm-cache/`. For each plugin being updated:
+
+1. **Read** `~/.claude/plugins/npm-cache/package.json` and `package-lock.json`
+2. **Remove** the package entry from `package.json` dependencies (e.g., `@skillstack/<slug>`)
+3. **Remove** the corresponding `node_modules/@skillstack/<slug>` entry from `package-lock.json`
+   (both the root `dependencies` reference AND the `packages["node_modules/..."]` entry)
+4. **Delete** the stale `node_modules` directory:
+   ```bash
+   rm -rf ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug>
+   ```
+
+#### 3b. Reinstall
+
+Tell the user to run:
 
 ```
-/plugin update <plugin-name>@<marketplace-name>
-```
-
-If `/plugin update` is not supported, they can uninstall and reinstall:
-
-```
-/plugin uninstall <plugin-name>@<marketplace-name>
 /plugin install <plugin-name>@<marketplace-name>
 ```
 
+This triggers a fresh npm resolution against the registry, pulling the latest version.
+
+**Important**: Do NOT use `/plugin update` — it does not work correctly for npm-sourced plugins.
+
+If the user has multiple plugins to update, clean all npm cache entries first (step 3a for all),
+then have the user reinstall each one sequentially.
+
 ### Step 4: Confirm
 
-Summarize what was updated.
+After reinstall, verify the update by reading `~/.claude/plugins/installed_plugins.json` and
+confirming the new version matches the expected latest version.
+
+Summarize what was updated:
+- Plugin name: old version -> new version (confirmed)

@@ -4,6 +4,12 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.5.1] - 2026-03-11
+
+### Fixed
+
+- **`/update-plugins`**: Fixed npm-sourced plugin updates not resolving to latest version. Claude Code's native `/plugin update` has a known issue where npm's lockfile prevents version resolution — the skill now cleans stale npm cache entries before reinstalling, ensuring buyers always get the correct version.
+
 ## [1.5.0] - 2026-03-10
 
 ### Changed
