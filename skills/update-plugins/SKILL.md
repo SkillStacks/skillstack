@@ -5,11 +5,29 @@ description: Check for and apply updates to installed SkillStack plugins.
 
 ## Update SkillStack Plugins
 
-### Step 1: Check for updates
+### Step 1: Find installed SkillStack plugins
 
-Call `skillstack_check_updates` with the user's installed SkillStack plugins.
+SkillStack plugins come from TWO sources — identify both:
 
-To find installed SkillStack plugins, check `/plugin` output for plugins from the "skillstack" marketplace.
+1. **The SkillStack buyer plugin** — installed from the `skillstack-marketplace`
+   (e.g., `skillstack@skillstack-marketplace` in `installed_plugins.json`)
+
+2. **Plugins from SkillStack storefronts** — installed from creator marketplaces hosted on
+   `store.skillstack.sh`. To find these:
+   a. Read `~/.claude/plugins/known_marketplaces.json`
+   b. Find any marketplace with a `source.url` containing `store.skillstack.sh`
+   c. Read that marketplace manifest file (the `installLocation` path or the file at
+      `~/.claude/plugins/marketplaces/<marketplace-name>`)
+   d. For each plugin in the manifest, extract the SkillStack slug from the npm package name
+      (e.g., `@skillstack/kenneth-liao-selling-skills` → slug is `kenneth-liao-selling-skills`)
+   e. Cross-reference with `installed_plugins.json` to find installed ones and their versions
+      (the key format is `<plugin-name>@<marketplace-name>`)
+
+### Step 1b: Check for updates
+
+Call `skillstack_check_updates` with ALL identified SkillStack plugins — both the buyer plugin
+and any storefront-distributed plugins. Use the SkillStack slug (not the local plugin name) and
+the currently installed version for each.
 
 ### Step 2: Report results
 
