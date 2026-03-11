@@ -27,7 +27,7 @@ Ask the user: "Do you have a license key for a paid plugin you'd like to activat
 - If **no** → tell them:
   > "You're all set for free plugins! To install a plugin, add a creator's storefront and install from it:
   >
-  > `/plugin marketplace add https://store.skillstack.sh/s/<creator>/marketplace.json`
+  > `/plugin marketplace add https://store.skillstack.sh/s/<creator>/<marketplace-slug>/marketplace.json`
   > `/plugin install <plugin-name>@<marketplace-name>`
   >
   > Select **"Install for you (user scope)"** when prompted. Restart Claude Code when done.
@@ -124,7 +124,7 @@ Then show the install commands. The `skillstack_activate` response includes `mar
 **If install commands are NOT available:**
 > "Now add the creator's storefront and install the plugin. Get the storefront URL from the creator, then run:
 >
-> `/plugin marketplace add https://store.skillstack.sh/s/<creator>/marketplace.json`
+> `/plugin marketplace add https://store.skillstack.sh/s/<creator>/<marketplace-slug>/marketplace.json`
 > `/plugin install <plugin-name>@<marketplace-name>`
 >
 > Select **"Install for you (user scope)"** when prompted. Then restart Claude Code for the skills to take effect.
