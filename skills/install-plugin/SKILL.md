@@ -67,10 +67,10 @@ Instruct the user to run:
 
 For example:
 ```
-/plugin install linear-pm@my-storefront
+/plugin install linear-pm@my-plugins
 ```
 
-**Note:** The `<marketplace-name>` is the name of the creator's storefront, not "skillstack". Check which marketplaces the user has added with `/plugin` if they're unsure.
+**Note:** The `<marketplace-name>` is the name from the creator's marketplace at `store.skillstack.sh`, not "skillstack". Check which marketplaces the user has added with `/plugin` if they're unsure.
 
 **Important:** Tell the user that when Claude Code prompts them to choose an installation scope, they should select **"Install for you (user scope)"** — the first option. This is the recommended default.
 

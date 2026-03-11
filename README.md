@@ -8,7 +8,7 @@ This plugin connects Claude Code to the SkillStack distribution system. It provi
 
 - **Registry configuration** — points npm to the SkillStack registry
 - **License activation** — validates your license key and sets up authentication
-- **Plugin installation** — guides you through installing plugins from creator storefronts
+- **Plugin installation** — guides you through installing plugins from creator marketplaces
 - **Update management** — checks for and applies plugin updates
 
 ## How It Works
