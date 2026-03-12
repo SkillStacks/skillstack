@@ -18,6 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - **`/install-plugin`**: 403 errors now include support fallback if `/activate-license` doesn't resolve the issue. Post-install confirmation mentions `/skillstack:update-plugins` for future updates.
 - **`/activate-license`**: All failure states now have a support fallback (`support@skillstack.sh`) when `creator_contact` is unavailable. Added catch-all for unexpected errors.
 - **All skills**: Added `support@skillstack.sh` as the universal support contact for unresolvable issues
+- **`/activate-license`**: Concrete storefront URL pattern (`https://store.skillstack.sh/s/{owner}/{slug}/marketplace.json`) replacing vague references; `distribution_limit` error handling; documented `marketplace_command`/`install_command` response field usage
+- **`README.md`**: Updated MCP tools table to list all 7 tools with legacy/creator annotations
 
 ## [1.6.2] - 2026-03-12
 

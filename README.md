@@ -38,10 +38,13 @@ These tools are available to Claude Code automatically via the included MCP conn
 
 | Tool | Description |
 |------|-------------|
-| `skillstack_list` | Browse all available plugins with metadata and pricing info |
-| `skillstack_activate` | Validate a license key and get an auth token for paid plugins |
-| `skillstack_resolve_key` | Auto-detect which plugin a license key belongs to |
-| `skillstack_check_updates` | Compare installed versions against latest available |
+| `skillstack_list` | Browse available plugins with metadata and pricing info |
+| `skillstack_activate` | Validate a license key and get an auth token. Returns `marketplace_command` and `install_command` for easy setup. |
+| `skillstack_resolve_key` | Auto-detect which plugin a license key belongs to. Also returns `marketplace_command` and `install_command`. |
+| `skillstack_check_updates` | Batch check installed plugins for available updates |
+| `skillstack_creator_stats` | Creator analytics (installs, activations, unique buyers). Creator-facing — not used by buyer skills. |
+| `skillstack_install` | *(legacy)* Git clone approach. Kept as fallback. |
+| `skillstack_update` | *(legacy)* Git-based update. Kept as fallback. |
 
 ## Prerequisites
 

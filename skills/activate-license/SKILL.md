@@ -22,7 +22,7 @@ Output: `{ registryConfigured, existingToken }`
 
 ### Step 2: Ask about license key
 
-Ask if the user has a license key for a paid plugin. If no, explain they're set for free plugins — give the storefront URL pattern and `/plugin install` command. Done.
+Ask if the user has a license key for a paid plugin. If no, explain they're set for free plugins — give the storefront URL (`https://store.skillstack.sh/s/{github_owner}/{marketplace_slug}/marketplace.json`) and `/plugin install` command. Done.
 
 ### Step 3: Get license key
 
@@ -50,13 +50,14 @@ Call `skillstack_activate` with `plugin_slug`, `license_key`, and `existing_toke
    - **subscription**: updates included while active
    - **lifetime**: all future updates included
    - **onetime**: locked to current version
-3. Show install commands if `marketplace_command` and `install_command` are available (from this response or Step 4). Otherwise, provide the storefront URL pattern.
+3. Show install commands using `marketplace_command` and `install_command` from this response or from the `skillstack_resolve_key` response in Step 4. These fields contain the exact ready-to-run commands. If neither response included them, fall back to the storefront URL pattern: `https://store.skillstack.sh/s/{github_owner}/{marketplace_slug}/marketplace.json`.
 4. Remind user to select "Install for you (user scope)" and restart Claude Code.
 
 **On failure** — check `status`:
 - **`misconfigured`**: Creator's config is broken, not the buyer's fault. Show `creator_contact` if available; otherwise suggest reaching out to **support@skillstack.sh** for help. Do NOT suggest re-entering the key.
 - **`key_bound_to_other_plugin`**: This key is already tied to another plugin (`bound_plugin` in response). Show the bound plugin name. Do NOT suggest re-entering the key — it will always fail. Suggest the user check their purchase confirmation email, or contact the plugin creator (`creator_contact` if available) or **support@skillstack.sh**.
 - **`not_found`**: Invalid key — ask user to double-check and retry
+- **`distribution_limit`**: The plugin creator's free-tier distribution limit has been reached. Tell the buyer this is a creator-side limit, not their fault. Show `creator_contact` if available so they can reach out to the creator; otherwise suggest contacting **support@skillstack.sh**.
 - **`revoked`**: License revoked — suggest renewing subscription or contacting the plugin creator
 - **`expired`**: License expired — suggest renewing
 - **Any other unexpected error**: Show the error and suggest reaching out to **support@skillstack.sh**
