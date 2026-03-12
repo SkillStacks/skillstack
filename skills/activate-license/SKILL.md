@@ -55,6 +55,7 @@ Call `skillstack_activate` with `plugin_slug`, `license_key`, and `existing_toke
 
 **On failure** — check `status`:
 - **`misconfigured`**: Creator's config is broken, not the buyer's fault. Show `creator_contact` if available. Do NOT suggest re-entering the key.
+- **`key_bound_to_other_plugin`**: This key is already tied to another plugin (`bound_plugin` in response). Show the bound plugin name. Do NOT suggest re-entering the key — it will always fail. Suggest the user check their purchase or contact the creator.
 - **`not_found`**: Invalid key — check and retry
 - **`revoked`**: License revoked — renew subscription
 - **`expired`**: License expired — renew
