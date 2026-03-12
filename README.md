@@ -43,6 +43,11 @@ These tools are available to Claude Code automatically via the included MCP conn
 | `skillstack_resolve_key` | Auto-detect which plugin a license key belongs to |
 | `skillstack_check_updates` | Compare installed versions against latest available |
 
+## Prerequisites
+
+- [Claude Code](https://claude.ai) installed
+- [Node.js](https://nodejs.org) (v18+) — includes `npm`, which SkillStack uses to deliver plugin packages
+
 ## Quick Start
 
 ```

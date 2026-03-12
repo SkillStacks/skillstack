@@ -4,6 +4,22 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.0] - 2026-03-11
+
+### Added
+
+- **Helper scripts**: `update-plugin.mjs`, `discover-plugins.mjs`, `check-registry.mjs` — programmatic replacements for fragile inline instructions. 53 tests covering all edge cases.
+- **Node.js v18+ prerequisite** documented in README
+
+### Changed
+
+- **All skills**: Descriptions rewritten to "Use when..." format for better skill discovery
+- **All skills**: Verbose quoted messages replaced with intent descriptions — Claude adapts responses naturally instead of following prescribed scripts
+- **`/update-plugins`**: npm cache cleanup, reinstall, and verification now handled by `update-plugin.mjs` script (~56% token reduction)
+- **`/update-plugins`**: Plugin discovery now handled by `discover-plugins.mjs` script
+- **`/activate-license`**: Registry check now handled by `check-registry.mjs` script (~50% token reduction)
+- **`/install-plugin`**: Registry check deduplicated via `check-registry.mjs` (~52% token reduction)
+
 ## [1.5.5] - 2026-03-11
 
 ### Fixed

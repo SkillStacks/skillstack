@@ -1,156 +1,65 @@
 ---
 name: update-plugins
-description: Check for and apply updates to installed SkillStack plugins.
+description: Use when the user wants to check for plugin updates, upgrade from free to premium, or encounters stale npm cache issues with SkillStack plugins.
 ---
 
 ## Update SkillStack Plugins
 
-### Step 1: Find installed SkillStack storefront plugins
+Manages updates for npm-sourced plugins from SkillStack storefronts. Does NOT cover the buyer or creator plugins — those are git-based and use `/plugin update` natively.
 
-This skill manages updates for **npm-sourced plugins from SkillStack storefronts only**.
-Do NOT include the SkillStack buyer plugin (`skillstack@skillstack-marketplace`) or the creator
-plugin (`skillstack-creator@skillstack-creator`) — those are git-based and update normally
-through Claude Code's native `/plugin update`.
+### Step 1: Discover installed plugins
 
-To find SkillStack storefront plugins:
+Run the discovery script to find all installed SkillStack storefront plugins:
 
-1. Read `~/.claude/plugins/known_marketplaces.json`
-2. Find any marketplace with a `source.url` containing `store.skillstack.sh`
-3. Read that marketplace manifest file (at `~/.claude/plugins/marketplaces/<marketplace-name>`)
-4. For each plugin in the manifest, extract the SkillStack slug from the npm package name
-   (e.g., `@skillstack/kenneth-liao-selling-skills` → slug is `kenneth-liao-selling-skills`)
-5. Cross-reference with `~/.claude/plugins/installed_plugins.json` to find which ones are
-   installed and their current versions (key format: `<plugin-name>@<marketplace-name>`)
+```bash
+node <this-skill-dir>/../../../scripts/discover-plugins.mjs --plugin-dir ~/.claude/plugins
+```
 
-### Step 1b: Check for updates
+Output is a JSON array of `{ slug, currentVersion, marketplace, pluginName }`.
 
-Call `skillstack_check_updates` with the identified storefront plugins.
-Use the SkillStack slug (not the local plugin name) and the currently installed version for each.
+If empty, tell the user they have no SkillStack storefront plugins installed.
 
-### Step 2: Report results
+### Step 2: Check for updates
+
+Call `skillstack_check_updates` with the slugs and current versions from Step 1.
 
 If no updates available, tell the user all plugins are up to date.
 
-If updates are available, list them:
-- Plugin name: current version -> latest version
+If updates are available, list them and ask which to update. Tailor messaging by license type (from `skillstack_list`):
+- **onetime**: Update available but their license covers current version only — suggest lifetime upgrade
+- **subscription**: Update included while active. If 403 on install, subscription may have lapsed
+- **lifetime**: Update included
 
-Ask the user which plugins they want to update (all, specific ones, or none).
-
-#### License-type-aware update messaging
-
-After listing available updates, check the buyer's license type for each plugin. Call `skillstack_list` and cross-reference `license_options` with the buyer's installed state.
-
-For **onetime** buyers with available updates:
-> "**<plugin-name>**: v<current> → v<latest> available, but your one-time license covers v<current> only.
->
-> To get v<latest>, you can upgrade to a lifetime license from the creator — this includes all future updates."
-
-For **subscription** buyers:
-> "**<plugin-name>**: v<current> → v<latest> available. Your subscription includes this update."
->
-> If the subscription has lapsed (update fails with 403):
-> "Your subscription for **<plugin-name>** appears to have lapsed. Renew with the creator to restore access to updates."
-
-For **lifetime** buyers:
-> "**<plugin-name>**: v<current> → v<latest> available. Your lifetime license includes this update."
-
-If the buyer's license type is unknown (no `license_type` in response), fall back to the generic update message without license-specific context.
-
-### Detecting variant upgrades
-
-After checking for version updates, also check if the user has activated a license for any plugin they previously installed as the free variant.
-
-To detect this: call `skillstack_list` and cross-reference with installed plugins. If a plugin is freemium (`is_freemium` is true) and the user now has a valid license key (check ~/.npmrc for sst_* token, then check if the plugin slug is activated), but they currently have the free variant installed (fewer skills than the total):
-
-Tell the user:
-> "**[plugin-name]** can be upgraded to premium! You have a valid license.
->
-> This will unlock [total - free_skill_count] additional skills:
->   [list of premium skill names if available, or just the count]
->
-> To upgrade, reinstall the plugin:
->   /plugin uninstall [plugin-name]@[marketplace]
->   /plugin install [plugin-name]@[marketplace]
->
-> Then restart Claude Code for the changes to take effect."
-
-After the user reinstalls, confirm the upgrade:
-> "**[plugin-name]** upgraded to premium — all [total] skills unlocked!"
-
-### Detecting license upgrade opportunities
-
-After checking for variant upgrades, also check if the buyer has a **onetime** license for a plugin that also offers **lifetime**.
-
-To detect this: call `skillstack_list` and check each plugin's `license_options`. If a plugin has both `onetime` and `lifetime` in `license_options`, and the buyer's current license type is `onetime` (check via `skillstack_check_updates` response or prior activation data):
-
-> "**<plugin-name>** offers a lifetime license upgrade. Your current one-time license covers v<purchased_version>. A lifetime license would include all future updates.
->
-> Contact the creator to upgrade, then run `/activate-license` to activate your new key."
-
-This is informational — don't block on it. Show it alongside other update info.
+Also check for:
+- **Variant upgrades**: If a freemium plugin was installed free but user now has a license, suggest reinstalling via `/plugin uninstall` then `/plugin install`
+- **License upgrade opportunities**: If user has onetime but plugin also offers lifetime, mention it informationally
 
 ### Step 3: Apply updates
 
-SkillStack plugins are npm-sourced. Claude Code's native `/plugin update` has a known issue where
-npm's lockfile prevents version resolution even when a newer version is available. To work around
-this, the skill must clean the npm cache before reinstalling.
+For each plugin the user wants to update, run the update script:
 
-For each plugin the user wants to update:
+```bash
+node <this-skill-dir>/../../../scripts/update-plugin.mjs \
+  <slug> <new-version> <marketplace-name> <plugin-name> \
+  --plugin-dir ~/.claude/plugins
+```
 
-#### 3a. Clean stale npm cache
+The script handles all phases automatically:
+1. Cleans stale npm cache (package.json, package-lock.json, node_modules)
+2. Adds exact version dependency (no caret ranges)
+3. Runs `npm install` (reads ~/.npmrc for auth)
+4. Copies to plugin cache (including dotfiles like `.claude-plugin/`)
+5. Updates `installed_plugins.json`
+6. Verifies `plugin.json` version matches
 
-The npm cache lives at `~/.claude/plugins/npm-cache/`. For each plugin being updated:
+Output is JSON with `{ success, confirmedVersion, error }`.
 
-1. **Read** `~/.claude/plugins/npm-cache/package.json` and `package-lock.json`
-2. **Remove** the package entry from `package.json` dependencies (e.g., `@skillstack/<slug>`)
-3. **Remove** the corresponding `node_modules/@skillstack/<slug>` entry from `package-lock.json`
-   (both the root `dependencies` reference AND the `packages["node_modules/..."]` entry)
-4. **Delete** the stale `node_modules` directory:
-   ```bash
-   rm -rf ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug>
-   ```
+If the script fails, show the error. Common failures:
+- **403**: License issue — subscription lapsed or onetime version mismatch
+- **npm install failure**: Network or registry issue — retry or check `~/.npmrc`
 
-#### 3b. Install the new version
-
-Do this automatically — do NOT ask the user to run `/plugin install` manually.
-
-1. **Add the new dep** to `~/.claude/plugins/npm-cache/package.json` with the exact version:
-   ```json
-   "@skillstack/<slug>": "<new-version>"
-   ```
-   Use the exact version (e.g., `"1.10.2"`), NOT a caret range.
-
-2. **Run npm install** in the npm-cache directory:
-   ```bash
-   cd ~/.claude/plugins/npm-cache && npm install
-   ```
-   npm reads `~/.npmrc` for the `@skillstack` registry URL and auth token automatically.
-   The SkillStack registry enforces license checks server-side during this step.
-
-3. **Copy installed files** to the plugin cache (including dotfiles like `.claude-plugin/`):
-   ```bash
-   rm -rf ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>
-   mkdir -p ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>/<new-version>
-   cp -a ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug>/. \
-     ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>/<new-version>/
-   ```
-   **Critical**: Use `cp -a source/. target/` (note the trailing `/.`) to ensure dotfile
-   directories like `.claude-plugin/` are copied. Claude Code requires `.claude-plugin/plugin.json`
-   to recognize the plugin.
-
-4. **Update `~/.claude/plugins/installed_plugins.json`**: Edit the entry for
-   `<plugin-name>@<marketplace-name>` — update `installPath` (with new version in path),
-   `version`, and `lastUpdated` (ISO timestamp).
-
-**Important**: Do NOT use `/plugin update` — it does not work correctly for npm-sourced plugins.
+**Important**: Do NOT use `/plugin update` — it has a known npm lockfile bug with SkillStack plugins.
 
 ### Step 4: Confirm
 
-Verify the update by reading the newly installed `plugin.json` at
-`~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/.claude-plugin/plugin.json`
-and confirming the version matches.
-
-Summarize what was updated:
-- Plugin name: old version -> new version (confirmed)
-
-Tell the user to **restart Claude Code** for the updated skills to take effect.
+Summarize what was updated (plugin: old → new version) and tell the user to **restart Claude Code**.
