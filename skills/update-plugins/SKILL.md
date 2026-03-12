@@ -110,25 +110,43 @@ The npm cache lives at `~/.claude/plugins/npm-cache/`. For each plugin being upd
    rm -rf ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug>
    ```
 
-#### 3b. Reinstall
+#### 3b. Install the new version
 
-Tell the user to run:
+Do this automatically — do NOT ask the user to run `/plugin install` manually.
 
-```
-/plugin install <plugin-name>@<marketplace-name>
-```
+1. **Add the new dep** to `~/.claude/plugins/npm-cache/package.json` with the exact version:
+   ```json
+   "@skillstack/<slug>": "<new-version>"
+   ```
+   Use the exact version (e.g., `"1.10.2"`), NOT a caret range.
 
-This triggers a fresh npm resolution against the registry, pulling the latest version.
+2. **Run npm install** in the npm-cache directory:
+   ```bash
+   cd ~/.claude/plugins/npm-cache && npm install
+   ```
+   npm reads `~/.npmrc` for the `@skillstack` registry URL and auth token automatically.
+   The SkillStack registry enforces license checks server-side during this step.
+
+3. **Copy installed files** to the plugin cache:
+   ```bash
+   rm -rf ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>
+   cp -r ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug> \
+     ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>/<new-version>
+   ```
+
+4. **Update `~/.claude/plugins/installed_plugins.json`**: Edit the entry for
+   `<plugin-name>@<marketplace-name>` — update `installPath` (with new version in path),
+   `version`, and `lastUpdated` (ISO timestamp).
 
 **Important**: Do NOT use `/plugin update` — it does not work correctly for npm-sourced plugins.
 
-If the user has multiple plugins to update, clean all npm cache entries first (step 3a for all),
-then have the user reinstall each one sequentially.
-
 ### Step 4: Confirm
 
-After reinstall, verify the update by reading `~/.claude/plugins/installed_plugins.json` and
-confirming the new version matches the expected latest version.
+Verify the update by reading the newly installed `plugin.json` at
+`~/.claude/plugins/cache/<marketplace>/<plugin>/<version>/.claude-plugin/plugin.json`
+and confirming the version matches.
 
 Summarize what was updated:
 - Plugin name: old version -> new version (confirmed)
+
+Tell the user to **restart Claude Code** for the updated skills to take effect.

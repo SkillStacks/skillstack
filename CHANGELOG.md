@@ -4,6 +4,12 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.5.4] - 2026-03-11
+
+### Changed
+
+- **`/update-plugins`**: Updates are now fully automatic — the skill runs npm install, copies files to the plugin cache, and updates installed_plugins.json without requiring the buyer to manually run `/plugin install`
+
 ## [1.5.3] - 2026-03-11
 
 ### Fixed
