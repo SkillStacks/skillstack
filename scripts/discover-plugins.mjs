@@ -32,7 +32,9 @@ export function discoverPlugins(pluginDir) {
   }
 
   const knownMarketplaces = JSON.parse(fs.readFileSync(knownPath, 'utf-8'));
-  const installedPlugins = JSON.parse(fs.readFileSync(installedPath, 'utf-8'));
+  const installedRaw = JSON.parse(fs.readFileSync(installedPath, 'utf-8'));
+  // Support both v1 (flat) and v2 ({ version: 2, plugins: { key: [...] } }) formats
+  const installedPlugins = installedRaw.plugins || installedRaw;
 
   // Find SkillStack storefronts (URL-based sources containing store.skillstack.sh)
   const skillstackMarketplaces = [];
@@ -65,7 +67,14 @@ export function discoverPlugins(pluginDir) {
       const installedKey = `${pluginName}@${marketplaceName}`;
 
       // Only include if actually installed
-      if (!installedPlugins[installedKey]) {
+      const entry = installedPlugins[installedKey];
+      if (!entry) {
+        continue;
+      }
+
+      // v2 format: entries are arrays; v1 format: entries are objects
+      const pluginEntry = Array.isArray(entry) ? entry[0] : entry;
+      if (!pluginEntry) {
         continue;
       }
 
@@ -79,7 +88,7 @@ export function discoverPlugins(pluginDir) {
 
       results.push({
         slug,
-        currentVersion: installedPlugins[installedKey].version,
+        currentVersion: pluginEntry.version,
         marketplace: marketplaceName,
         pluginName,
       });

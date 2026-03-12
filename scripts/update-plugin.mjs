@@ -139,19 +139,30 @@ export function updateInstalledPlugins(pluginDir, marketplace, pluginName, versi
   const installed = JSON.parse(fs.readFileSync(installedPath, 'utf-8'));
   const key = `${pluginName}@${marketplace}`;
 
-  if (!installed[key]) {
+  // Support both v1 (flat) and v2 ({ version: 2, plugins: { key: [...] } }) formats
+  const isV2 = installed.version === 2 && installed.plugins;
+  const pluginsMap = isV2 ? installed.plugins : installed;
+
+  if (!pluginsMap[key]) {
+    throw new Error(`${key} not found in installed_plugins.json`);
+  }
+
+  // v2 format: entries are arrays; v1 format: entries are objects
+  const entry = Array.isArray(pluginsMap[key]) ? pluginsMap[key][0] : pluginsMap[key];
+
+  if (!entry) {
     throw new Error(`${key} not found in installed_plugins.json`);
   }
 
   // Update fields while preserving any extra fields
-  const oldPath = installed[key].installPath;
+  const oldPath = entry.installPath;
   // Replace the version segment in the path
   // The path format is: .../cache/<marketplace>/<plugin>/<version>
   const newPath = oldPath.replace(/\/[^/]+$/, `/${version}`);
 
-  installed[key].installPath = newPath;
-  installed[key].version = version;
-  installed[key].lastUpdated = new Date().toISOString();
+  entry.installPath = newPath;
+  entry.version = version;
+  entry.lastUpdated = new Date().toISOString();
 
   fs.writeFileSync(installedPath, JSON.stringify(installed, null, 2) + '\n');
 }

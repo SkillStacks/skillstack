@@ -227,3 +227,80 @@ describe('discoverPlugins', () => {
     assert.ok(marketplaces.includes('other-marketplace'));
   });
 });
+
+// --- v2 format tests (Claude Code's actual format) ---
+
+describe('discoverPlugins (v2 format)', () => {
+  let pluginDir;
+
+  function createV2Fixture() {
+    const root = createFixture({
+      installed: {
+        version: 2,
+        plugins: {
+          'my-plugin@test-marketplace': [
+            {
+              scope: 'user',
+              installPath: '/tmp/cache/test-marketplace/my-plugin/1.0.0',
+              version: '1.0.0',
+              installedAt: '2026-01-01T00:00:00.000Z',
+              lastUpdated: '2026-01-01T00:00:00.000Z',
+            },
+          ],
+          'another-plugin@test-marketplace': [
+            {
+              scope: 'user',
+              installPath: '/tmp/cache/test-marketplace/another-plugin/2.0.0',
+              version: '2.0.0',
+              installedAt: '2026-01-15T00:00:00.000Z',
+              lastUpdated: '2026-01-15T00:00:00.000Z',
+            },
+          ],
+          'third-plugin@other-marketplace': [
+            {
+              scope: 'user',
+              installPath: '/tmp/cache/other-marketplace/third-plugin/3.0.0',
+              version: '3.0.0',
+              installedAt: '2026-02-01T00:00:00.000Z',
+              lastUpdated: '2026-02-01T00:00:00.000Z',
+            },
+          ],
+        },
+      },
+    });
+    return root;
+  }
+
+  beforeEach(() => { pluginDir = createV2Fixture(); });
+  afterEach(() => { cleanup(pluginDir); });
+
+  it('finds plugins from v2 format installed_plugins.json', () => {
+    const result = discoverPlugins(pluginDir);
+    assert.ok(result.length > 0);
+    const slugs = result.map(p => p.slug);
+    assert.ok(slugs.includes('test-creator-my-plugin'));
+    assert.ok(slugs.includes('test-creator-another-plugin'));
+    assert.ok(slugs.includes('other-creator-third-plugin'));
+  });
+
+  it('extracts correct version from v2 array entries', () => {
+    const result = discoverPlugins(pluginDir);
+    const myPlugin = result.find(p => p.slug === 'test-creator-my-plugin');
+    assert.equal(myPlugin.currentVersion, '1.0.0');
+
+    const third = result.find(p => p.slug === 'other-creator-third-plugin');
+    assert.equal(third.currentVersion, '3.0.0');
+  });
+
+  it('excludes plugins not in v2 plugins map', () => {
+    const installedPath = path.join(pluginDir, 'installed_plugins.json');
+    const installed = JSON.parse(fs.readFileSync(installedPath, 'utf-8'));
+    delete installed.plugins['my-plugin@test-marketplace'];
+    fs.writeFileSync(installedPath, JSON.stringify(installed, null, 2));
+
+    const result = discoverPlugins(pluginDir);
+    const slugs = result.map(p => p.slug);
+    assert.ok(!slugs.includes('test-creator-my-plugin'));
+    assert.ok(slugs.includes('test-creator-another-plugin'));
+  });
+});

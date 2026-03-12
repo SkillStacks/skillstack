@@ -4,6 +4,14 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.1] - 2026-03-12
+
+### Fixed
+
+- **`discover-plugins.mjs`**: Handle v2 format of `installed_plugins.json` (`{ version: 2, plugins: { key: [...] } }`) — entries are arrays, not plain objects
+- **`update-plugin.mjs`**: Same v2 format fix for `updateInstalledPlugins` — correctly reads and writes within the `plugins` wrapper and array entries
+- Both scripts remain backward-compatible with v1 (flat) format
+
 ## [1.6.0] - 2026-03-11
 
 ### Added

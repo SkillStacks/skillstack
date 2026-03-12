@@ -87,8 +87,8 @@ function createFixture(overrides = {}) {
     JSON.stringify({ name: 'my-plugin', version: '1.0.0' })
   );
 
-  // installed_plugins.json
-  const installedPlugins = overrides.installedPlugins ?? {
+  // installed_plugins.json — supports both v1 (flat) and v2 (wrapped) formats
+  const defaultV1 = {
     'my-plugin@test-marketplace': {
       installPath: path.join(cache, 'test-marketplace', 'my-plugin', '1.0.0'),
       version: '1.0.0',
@@ -100,6 +100,7 @@ function createFixture(overrides = {}) {
       lastUpdated: '2026-01-15T00:00:00.000Z',
     },
   };
+  const installedPlugins = overrides.installedPlugins ?? defaultV1;
   fs.writeFileSync(
     path.join(root, 'installed_plugins.json'),
     JSON.stringify(installedPlugins, null, 2)
@@ -517,5 +518,155 @@ describe('edge cases', () => {
     );
 
     cleanup(pluginDir);
+  });
+});
+
+// --- v2 format tests (Claude Code's actual format) ---
+
+/** Create a v2 format installed_plugins.json */
+function createV2InstalledPlugins(cache) {
+  return {
+    version: 2,
+    plugins: {
+      'my-plugin@test-marketplace': [
+        {
+          scope: 'user',
+          installPath: path.join(cache, 'test-marketplace', 'my-plugin', '1.0.0'),
+          version: '1.0.0',
+          installedAt: '2026-01-01T00:00:00.000Z',
+          lastUpdated: '2026-01-01T00:00:00.000Z',
+        },
+      ],
+      'other-plugin@other-marketplace': [
+        {
+          scope: 'user',
+          installPath: path.join(cache, 'other-marketplace', 'other-plugin', '2.0.0'),
+          version: '2.0.0',
+          installedAt: '2026-01-15T00:00:00.000Z',
+          lastUpdated: '2026-01-15T00:00:00.000Z',
+        },
+      ],
+    },
+  };
+}
+
+describe('updateInstalledPlugins (v2 format)', () => {
+  let pluginDir;
+  beforeEach(() => {
+    pluginDir = createFixture();
+    const cache = path.join(pluginDir, 'cache');
+    // Overwrite with v2 format
+    fs.writeFileSync(
+      path.join(pluginDir, 'installed_plugins.json'),
+      JSON.stringify(createV2InstalledPlugins(cache), null, 2)
+    );
+  });
+  afterEach(() => { cleanup(pluginDir); });
+
+  it('updates the version in v2 array entry', () => {
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const installed = JSON.parse(fs.readFileSync(
+      path.join(pluginDir, 'installed_plugins.json'), 'utf-8'
+    ));
+    assert.equal(installed.plugins['my-plugin@test-marketplace'][0].version, '1.5.0');
+  });
+
+  it('updates the installPath in v2 array entry', () => {
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const installed = JSON.parse(fs.readFileSync(
+      path.join(pluginDir, 'installed_plugins.json'), 'utf-8'
+    ));
+    assert.ok(
+      installed.plugins['my-plugin@test-marketplace'][0].installPath.includes('1.5.0'),
+      'installPath should contain new version'
+    );
+  });
+
+  it('preserves the version field and plugins wrapper', () => {
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const installed = JSON.parse(fs.readFileSync(
+      path.join(pluginDir, 'installed_plugins.json'), 'utf-8'
+    ));
+    assert.equal(installed.version, 2);
+    assert.ok(installed.plugins, 'plugins wrapper should be preserved');
+  });
+
+  it('preserves scope and installedAt fields', () => {
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const installed = JSON.parse(fs.readFileSync(
+      path.join(pluginDir, 'installed_plugins.json'), 'utf-8'
+    ));
+    const entry = installed.plugins['my-plugin@test-marketplace'][0];
+    assert.equal(entry.scope, 'user');
+    assert.equal(entry.installedAt, '2026-01-01T00:00:00.000Z');
+  });
+
+  it('preserves other plugin entries in v2 format', () => {
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const installed = JSON.parse(fs.readFileSync(
+      path.join(pluginDir, 'installed_plugins.json'), 'utf-8'
+    ));
+    assert.equal(installed.plugins['other-plugin@other-marketplace'][0].version, '2.0.0');
+  });
+
+  it('throws if plugin entry does not exist in v2 format', () => {
+    assert.throws(
+      () => updateInstalledPlugins(pluginDir, 'nonexistent-marketplace', 'ghost', '1.0.0'),
+      { message: /not found in installed_plugins\.json/ }
+    );
+  });
+
+  it('updates lastUpdated to a recent ISO timestamp in v2 format', () => {
+    const before = Date.now();
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+    const after = Date.now();
+
+    const installed = JSON.parse(fs.readFileSync(
+      path.join(pluginDir, 'installed_plugins.json'), 'utf-8'
+    ));
+    const ts = new Date(installed.plugins['my-plugin@test-marketplace'][0].lastUpdated).getTime();
+    assert.ok(ts >= before && ts <= after, 'lastUpdated should be within test execution window');
+  });
+});
+
+describe('idempotency (v2 format)', () => {
+  let pluginDir;
+  beforeEach(() => {
+    pluginDir = createFixture();
+    const cache = path.join(pluginDir, 'cache');
+    fs.writeFileSync(
+      path.join(pluginDir, 'installed_plugins.json'),
+      JSON.stringify(createV2InstalledPlugins(cache), null, 2)
+    );
+  });
+  afterEach(() => { cleanup(pluginDir); });
+
+  it('produces identical state when run twice with v2 format', () => {
+    // First run
+    cleanNpmCache(pluginDir, 'test-creator-my-plugin');
+    addDependency(pluginDir, 'test-creator-my-plugin', '1.5.0');
+    simulateNpmInstall(pluginDir, 'test-creator-my-plugin', '1.5.0');
+    copyToCache(pluginDir, 'test-creator-my-plugin', '1.5.0', 'test-marketplace', 'my-plugin');
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const pkg1 = fs.readFileSync(path.join(pluginDir, 'npm-cache', 'package.json'), 'utf-8');
+
+    // Second run
+    cleanNpmCache(pluginDir, 'test-creator-my-plugin');
+    addDependency(pluginDir, 'test-creator-my-plugin', '1.5.0');
+    simulateNpmInstall(pluginDir, 'test-creator-my-plugin', '1.5.0');
+    copyToCache(pluginDir, 'test-creator-my-plugin', '1.5.0', 'test-marketplace', 'my-plugin');
+    updateInstalledPlugins(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+
+    const pkg2 = fs.readFileSync(path.join(pluginDir, 'npm-cache', 'package.json'), 'utf-8');
+    assert.equal(pkg1, pkg2);
+
+    const result = verify(pluginDir, 'test-marketplace', 'my-plugin', '1.5.0');
+    assert.equal(result.success, true);
   });
 });
