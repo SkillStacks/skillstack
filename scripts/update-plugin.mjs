@@ -22,6 +22,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
+import { updatePluginEntry } from './claude-plugins-adapter.mjs';
 
 // --- Exported functions (testable individually) ---
 
@@ -127,44 +128,10 @@ function copyDirRecursive(src, dest) {
 
 /**
  * Update installed_plugins.json with the new version, path, and timestamp.
- * Preserves all other entries and extra fields on the plugin entry.
+ * Delegates to the adapter module which handles v1/v2 format detection.
  */
 export function updateInstalledPlugins(pluginDir, marketplace, pluginName, version) {
-  const installedPath = path.join(pluginDir, 'installed_plugins.json');
-
-  if (!fs.existsSync(installedPath)) {
-    throw new Error(`installed_plugins.json not found at ${installedPath}`);
-  }
-
-  const installed = JSON.parse(fs.readFileSync(installedPath, 'utf-8'));
-  const key = `${pluginName}@${marketplace}`;
-
-  // Support both v1 (flat) and v2 ({ version: 2, plugins: { key: [...] } }) formats
-  const isV2 = installed.version === 2 && installed.plugins;
-  const pluginsMap = isV2 ? installed.plugins : installed;
-
-  if (!pluginsMap[key]) {
-    throw new Error(`${key} not found in installed_plugins.json`);
-  }
-
-  // v2 format: entries are arrays; v1 format: entries are objects
-  const entry = Array.isArray(pluginsMap[key]) ? pluginsMap[key][0] : pluginsMap[key];
-
-  if (!entry) {
-    throw new Error(`${key} not found in installed_plugins.json`);
-  }
-
-  // Update fields while preserving any extra fields
-  const oldPath = entry.installPath;
-  // Replace the version segment in the path
-  // The path format is: .../cache/<marketplace>/<plugin>/<version>
-  const newPath = oldPath.replace(/\/[^/]+$/, `/${version}`);
-
-  entry.installPath = newPath;
-  entry.version = version;
-  entry.lastUpdated = new Date().toISOString();
-
-  fs.writeFileSync(installedPath, JSON.stringify(installed, null, 2) + '\n');
+  updatePluginEntry(pluginDir, marketplace, pluginName, version);
 }
 
 /**

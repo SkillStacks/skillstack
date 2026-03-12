@@ -4,6 +4,19 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.2] - 2026-03-12
+
+### Added
+
+- **`claude-plugins-adapter.mjs`**: Abstraction layer for all Claude Code internal file formats — single point of change when formats evolve. Runtime schema validation with descriptive errors naming the exact assumption that broke.
+- **Integration smoke tests**: `integration-smoke.test.mjs` validates adapter against real `~/.claude/plugins/` files (skips gracefully if absent)
+
+### Changed
+
+- **`discover-plugins.mjs`**: Refactored to import from `claude-plugins-adapter.mjs` instead of parsing files directly
+- **`update-plugin.mjs`**: Refactored to delegate `updateInstalledPlugins` to adapter module
+- Total test count: 92 (up from 64)
+
 ## [1.6.1] - 2026-03-12
 
 ### Fixed
