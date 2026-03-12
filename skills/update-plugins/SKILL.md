@@ -127,12 +127,16 @@ Do this automatically — do NOT ask the user to run `/plugin install` manually.
    npm reads `~/.npmrc` for the `@skillstack` registry URL and auth token automatically.
    The SkillStack registry enforces license checks server-side during this step.
 
-3. **Copy installed files** to the plugin cache:
+3. **Copy installed files** to the plugin cache (including dotfiles like `.claude-plugin/`):
    ```bash
    rm -rf ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>
-   cp -r ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug> \
-     ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>/<new-version>
+   mkdir -p ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>/<new-version>
+   cp -a ~/.claude/plugins/npm-cache/node_modules/@skillstack/<slug>/. \
+     ~/.claude/plugins/cache/<marketplace-name>/<plugin-name>/<new-version>/
    ```
+   **Critical**: Use `cp -a source/. target/` (note the trailing `/.`) to ensure dotfile
+   directories like `.claude-plugin/` are copied. Claude Code requires `.claude-plugin/plugin.json`
+   to recognize the plugin.
 
 4. **Update `~/.claude/plugins/installed_plugins.json`**: Edit the entry for
    `<plugin-name>@<marketplace-name>` — update `installPath` (with new version in path),

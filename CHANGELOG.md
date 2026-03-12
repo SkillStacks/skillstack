@@ -4,6 +4,12 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.5.5] - 2026-03-11
+
+### Fixed
+
+- **`/update-plugins`**: Fixed dotfile directories (`.claude-plugin/`) not being copied during update. Uses `cp -a source/. target/` to ensure `plugin.json` is included — Claude Code requires this file to recognize the plugin.
+
 ## [1.5.4] - 2026-03-11
 
 ### Changed
