@@ -4,6 +4,12 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.5.3] - 2026-03-11
+
+### Fixed
+
+- **`/update-plugins`**: Only checks npm-sourced plugins from SkillStack storefronts (`store.skillstack.sh`). No longer includes the buyer or creator plugins, which are git-based and update through Claude Code's native mechanism.
+
 ## [1.5.2] - 2026-03-11
 
 ### Fixed

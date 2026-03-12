@@ -5,29 +5,27 @@ description: Check for and apply updates to installed SkillStack plugins.
 
 ## Update SkillStack Plugins
 
-### Step 1: Find installed SkillStack plugins
+### Step 1: Find installed SkillStack storefront plugins
 
-SkillStack plugins come from TWO sources — identify both:
+This skill manages updates for **npm-sourced plugins from SkillStack storefronts only**.
+Do NOT include the SkillStack buyer plugin (`skillstack@skillstack-marketplace`) or the creator
+plugin (`skillstack-creator@skillstack-creator`) — those are git-based and update normally
+through Claude Code's native `/plugin update`.
 
-1. **The SkillStack buyer plugin** — installed from the `skillstack-marketplace`
-   (e.g., `skillstack@skillstack-marketplace` in `installed_plugins.json`)
+To find SkillStack storefront plugins:
 
-2. **Plugins from SkillStack storefronts** — installed from creator marketplaces hosted on
-   `store.skillstack.sh`. To find these:
-   a. Read `~/.claude/plugins/known_marketplaces.json`
-   b. Find any marketplace with a `source.url` containing `store.skillstack.sh`
-   c. Read that marketplace manifest file (the `installLocation` path or the file at
-      `~/.claude/plugins/marketplaces/<marketplace-name>`)
-   d. For each plugin in the manifest, extract the SkillStack slug from the npm package name
-      (e.g., `@skillstack/kenneth-liao-selling-skills` → slug is `kenneth-liao-selling-skills`)
-   e. Cross-reference with `installed_plugins.json` to find installed ones and their versions
-      (the key format is `<plugin-name>@<marketplace-name>`)
+1. Read `~/.claude/plugins/known_marketplaces.json`
+2. Find any marketplace with a `source.url` containing `store.skillstack.sh`
+3. Read that marketplace manifest file (at `~/.claude/plugins/marketplaces/<marketplace-name>`)
+4. For each plugin in the manifest, extract the SkillStack slug from the npm package name
+   (e.g., `@skillstack/kenneth-liao-selling-skills` → slug is `kenneth-liao-selling-skills`)
+5. Cross-reference with `~/.claude/plugins/installed_plugins.json` to find which ones are
+   installed and their current versions (key format: `<plugin-name>@<marketplace-name>`)
 
 ### Step 1b: Check for updates
 
-Call `skillstack_check_updates` with ALL identified SkillStack plugins — both the buyer plugin
-and any storefront-distributed plugins. Use the SkillStack slug (not the local plugin name) and
-the currently installed version for each.
+Call `skillstack_check_updates` with the identified storefront plugins.
+Use the SkillStack slug (not the local plugin name) and the currently installed version for each.
 
 ### Step 2: Report results
 
