@@ -17,7 +17,10 @@ node <this-skill-dir>/../../../scripts/discover-plugins.mjs --plugin-dir ~/.clau
 
 Output is a JSON array of `{ slug, currentVersion, marketplace, pluginName }`.
 
-If empty, tell the user they have no SkillStack storefront plugins installed.
+If the script returns empty or produces no output:
+- Tell the user no SkillStack storefront plugins were detected
+- Suggest `/skillstack:install-plugin` to browse and install plugins
+- If the script errored or produced unexpected output, show the error and suggest reaching out to **support@skillstack.sh**
 
 ### Step 2: Check for updates
 
@@ -54,12 +57,13 @@ The script handles all phases automatically:
 
 Output is JSON with `{ success, confirmedVersion, error }`.
 
-If the script fails, show the error. Common failures:
-- **403**: License issue — subscription lapsed or onetime version mismatch
-- **npm install failure**: Network or registry issue — retry or check `~/.npmrc`
+If the script fails, show the error and guide next steps:
+- **403**: License issue — subscription may have lapsed, or onetime license doesn't cover this version. Suggest `/skillstack:activate-license` to check license status.
+- **npm install failure**: Network or registry issue — suggest retrying, or checking `~/.npmrc` for correct registry config.
+- **Script error / unexpected output**: Something went wrong on SkillStack's side. Suggest reaching out to **support@skillstack.sh** with the error details.
 
 **Important**: Do NOT use `/plugin update` — it has a known npm lockfile bug with SkillStack plugins.
 
 ### Step 4: Confirm
 
-Summarize what was updated (plugin: old → new version) and tell the user to **restart Claude Code**.
+Summarize what was updated (plugin: old → new version) and tell the user to **restart Claude Code** to load the new version.

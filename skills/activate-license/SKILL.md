@@ -54,11 +54,12 @@ Call `skillstack_activate` with `plugin_slug`, `license_key`, and `existing_toke
 4. Remind user to select "Install for you (user scope)" and restart Claude Code.
 
 **On failure** — check `status`:
-- **`misconfigured`**: Creator's config is broken, not the buyer's fault. Show `creator_contact` if available. Do NOT suggest re-entering the key.
-- **`key_bound_to_other_plugin`**: This key is already tied to another plugin (`bound_plugin` in response). Show the bound plugin name. Do NOT suggest re-entering the key — it will always fail. Suggest the user check their purchase or contact the creator.
-- **`not_found`**: Invalid key — check and retry
-- **`revoked`**: License revoked — renew subscription
-- **`expired`**: License expired — renew
+- **`misconfigured`**: Creator's config is broken, not the buyer's fault. Show `creator_contact` if available; otherwise suggest reaching out to **support@skillstack.sh** for help. Do NOT suggest re-entering the key.
+- **`key_bound_to_other_plugin`**: This key is already tied to another plugin (`bound_plugin` in response). Show the bound plugin name. Do NOT suggest re-entering the key — it will always fail. Suggest the user check their purchase confirmation email, or contact the plugin creator (`creator_contact` if available) or **support@skillstack.sh**.
+- **`not_found`**: Invalid key — ask user to double-check and retry
+- **`revoked`**: License revoked — suggest renewing subscription or contacting the plugin creator
+- **`expired`**: License expired — suggest renewing
+- **Any other unexpected error**: Show the error and suggest reaching out to **support@skillstack.sh**
 
 ### Step 7: Offer to activate another key
 

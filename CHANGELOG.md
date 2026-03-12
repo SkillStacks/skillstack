@@ -4,6 +4,21 @@ All notable changes to the SkillStack buyer plugin will be documented in this fi
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.6.3] - 2026-03-12
+
+### Fixed
+
+- **Windows compatibility**: CLI entry point detection in `discover-plugins.mjs`, `check-registry.mjs`, and `update-plugin.mjs` now uses `fileURLToPath()` instead of `new URL(import.meta.url).pathname` — fixes silent failure on Windows where path formats (`/C:/Users/...` vs `C:\Users\...`) never matched
+- **Windows `HOME` fallback**: All scripts now fall back to `process.env.USERPROFILE` when `HOME` is undefined (standard on Windows)
+
+### Changed
+
+- **`/update-plugins`**: Empty discovery results now guide users to `/skillstack:install-plugin` instead of a dead-end message. Script errors surface support contact.
+- **`/update-plugins`**: Error handling is now actionable per failure type (403 → check license status, npm → check registry config, unknown → contact support)
+- **`/install-plugin`**: 403 errors now include support fallback if `/activate-license` doesn't resolve the issue. Post-install confirmation mentions `/skillstack:update-plugins` for future updates.
+- **`/activate-license`**: All failure states now have a support fallback (`support@skillstack.sh`) when `creator_contact` is unavailable. Added catch-all for unexpected errors.
+- **All skills**: Added `support@skillstack.sh` as the universal support contact for unresolvable issues
+
 ## [1.6.2] - 2026-03-12
 
 ### Added

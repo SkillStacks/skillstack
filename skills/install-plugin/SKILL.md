@@ -30,7 +30,7 @@ From `skillstack_list`, check the plugin's `license_model`, `is_freemium`, and `
 
 If `creator_contact` is available, show it for paid plugins.
 
-**403 handling**: If user has an `sst_*` token but install fails with 403, they need to activate a license for THIS specific plugin → run `/activate-license`.
+**403 handling**: If user has an `sst_*` token but install fails with 403, they need to activate a license for THIS specific plugin → run `/skillstack:activate-license`. If the issue persists after activation, suggest reaching out to **support@skillstack.sh**.
 
 ### Step 4: Install
 
@@ -42,8 +42,11 @@ Instruct the user to run:
 
 Tell them to select **"Install for you (user scope)"** when prompted.
 
+If the install fails with an unexpected error, show the error and suggest contacting **support@skillstack.sh**.
+
 ### Step 5: Confirm
 
 After install succeeds:
-- **Freemium (free variant)**: Show free tier skill count, list included skills, mention premium upgrade path via `/activate-license`
+- **Freemium (free variant)**: Show free tier skill count, list included skills, mention premium upgrade path via `/skillstack:activate-license`
 - **Full install**: Confirm all skills unlocked
+- Mention that they can check for future updates with `/skillstack:update-plugins`

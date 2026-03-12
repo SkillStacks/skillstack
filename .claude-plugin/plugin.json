@@ -1,6 +1,6 @@
 {
   "name": "skillstack",
   "description": "Install, update, and manage paid Claude Code plugins via SkillStack. Handles license key validation and plugin distribution.",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "author": { "name": "SkillStack" }
 }

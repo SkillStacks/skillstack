@@ -15,6 +15,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   getInstalledPlugins,
   getSkillStackMarketplaces,
@@ -67,13 +68,14 @@ export function discoverPlugins(pluginDir) {
 
 // --- CLI Entry Point ---
 
+const __filename = fileURLToPath(import.meta.url);
 const isDirectExecution = process.argv[1] &&
-  path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname);
+  path.resolve(process.argv[1]) === path.resolve(__filename);
 
 if (isDirectExecution) {
   const args = process.argv.slice(2);
 
-  let pluginDir = path.join(process.env.HOME || '~', '.claude', 'plugins');
+  let pluginDir = path.join(process.env.HOME || process.env.USERPROFILE || '~', '.claude', 'plugins');
   const dirIdx = args.indexOf('--plugin-dir');
   if (dirIdx !== -1 && args[dirIdx + 1]) {
     pluginDir = args[dirIdx + 1];

@@ -15,6 +15,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 /**
  * Check if the SkillStack registry is configured and extract existing token.
@@ -49,13 +50,14 @@ export function checkRegistry(npmrcPath) {
 
 // --- CLI Entry Point ---
 
+const __filename = fileURLToPath(import.meta.url);
 const isDirectExecution = process.argv[1] &&
-  path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname);
+  path.resolve(process.argv[1]) === path.resolve(__filename);
 
 if (isDirectExecution) {
   const args = process.argv.slice(2);
 
-  let npmrcPath = path.join(process.env.HOME || '~', '.npmrc');
+  let npmrcPath = path.join(process.env.HOME || process.env.USERPROFILE || '~', '.npmrc');
   const pathIdx = args.indexOf('--npmrc');
   if (pathIdx !== -1 && args[pathIdx + 1]) {
     npmrcPath = args[pathIdx + 1];
