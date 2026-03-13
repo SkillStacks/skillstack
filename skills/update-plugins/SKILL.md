@@ -1,6 +1,6 @@
 ---
 name: update-plugins
-description: Use when the user wants to check for plugin updates, upgrade from free to premium, or encounters stale npm cache issues with SkillStack plugins.
+description: Use when the user wants to check for plugin updates, upgrade to a newer version, or encounters stale npm cache issues with SkillStack plugins.
 ---
 
 ## Update SkillStack Plugins

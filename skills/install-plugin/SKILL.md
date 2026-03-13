@@ -47,6 +47,6 @@ If the install fails with an unexpected error, show the error and suggest contac
 ### Step 5: Confirm
 
 After install succeeds:
-- **Freemium (free variant)**: Show free tier skill count, list included skills, mention premium upgrade path via `/skillstack:activate-license`
+- **Freemium (free variant)**: Show free tier skill count, list included skills. Mention that to upgrade: purchase a license from the creator, run `/skillstack:activate-license` to activate, then `/plugin uninstall` and `/plugin install` to get the full plugin
 - **Full install**: Confirm all skills unlocked
 - Mention that they can check for future updates with `/skillstack:update-plugins`
